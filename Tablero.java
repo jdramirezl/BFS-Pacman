@@ -1,14 +1,20 @@
-
-
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * CLase para crear los objetos Tablero, es decir para crear un tablero de celdas.
+ */
 public class Tablero {
     final int numFilas;
     final int numCols;
     private Celda[][] tablero;
     Posicion meta;
 
+    /**
+     * Crea un nuevo tablero.
+     *
+     * @param inputfile Un scanner que contiene en su constructor el archivo a procesar
+     */
     public Tablero(Scanner inputfile) {
         assert inputfile != null;
 
@@ -36,21 +42,43 @@ public class Tablero {
         }
     }
 
+    /**
+     * Metodo para poner un Caracter en una celda de coordenadas x, y
+     *
+     * @param x   Coordenada x
+     * @param y   Coordenada y
+     * @param per El personaje/caracter a posicionar
+     */
     public void setCelda(int x, int y, Caracter per){
         this.tablero[x][y].personaje = per;
         this.tablero[x][y].setCara(per);
     }
 
+    /**
+     * Metodo para poner una representacion (Es decir, una letra) en una celda de coordenadas x, y
+     *
+     * @param x              the x
+     * @param y              the y
+     * @param representacion El caracter/letra a poner
+     */
     public void setCelda(int x, int y, char representacion){
         this.tablero[x][y].letra = representacion;
     }
 
+    /**
+     * Set celda.
+     *
+     * @param x     the x
+     * @param y     the y
+     * @param color the color
+     */
     public void setCelda(int x, int y, String color){
         this.tablero[x][y].color = color;
     }
 
     /**
      * Devuelve un objeto celda de una coordenada del laberinto
+     *
      * @param x Coordenada x
      * @param y Coordenada y
      * @return La celda de la posicion proporcionada
@@ -59,6 +87,9 @@ public class Tablero {
         return tablero[x][y];
     }
 
+    /**
+     * Metodo para imprimir el tablero con ciertos colores de acuerdo a la letra
+     */
     public void dibujarTablero(){
         for(int i = 0; i<numFilas; i++){
             for (int j = 0; j<numCols; j++){
@@ -72,6 +103,11 @@ public class Tablero {
         }
     }
 
+    /**
+     * Metodo para dibujar el tablero, especial pues es para imprimir en rojo si pierde o azul si gana
+     *
+     * @param gano Verdadero o falso si gano
+     */
     public void dibujarTablero(boolean gano){
         for(int i = 0; i<numFilas; i++){
             for (int j = 0; j<numCols; j++){
@@ -87,6 +123,12 @@ public class Tablero {
         }
     }
 
+    /**
+     * Dibujar tablero.
+     *
+     * @param tablero the tablero
+     * @param camino  the camino
+     */
     public void dibujarTablero(Tablero tablero, boolean camino){
         for(int i = 0; i<numFilas; i++){
             for (int j = 0; j<numCols; j++){
@@ -102,13 +144,24 @@ public class Tablero {
         }
     }
 
-    private void PrintExtras(char x) {
+    /**
+     * Metodo auxiliar para la impresion del tablero
+     *
+     * @param x La letra a imprimir
+     */
+    public void PrintExtras(char x) {
         if(x == '*') System.out.print(Colors.ANSI_BLUE+x+Colors.ANSI_RESET);
         else if(x == 'O') System.out.print(Colors.ANSI_RED+Colors.ANSI_BOLD+x+Colors.ANSI_RESET);
         else if(x == ' ')  System.out.print(x);
     }
 
-    private void PrintExtras2(char x, Celda cel) {
+    /**
+     * Metodo auxiliar para la impresion del tablero
+     *
+     * @param x La letra a imprimir
+     * @param cel La celda a pintar
+     */
+    public void PrintExtras2(char x, Celda cel) {
         if(x == '*') System.out.print(Colors.ANSI_BLUE+x+Colors.ANSI_RESET);
         else if(x == 'O') System.out.print(Colors.ANSI_RED+Colors.ANSI_BOLD+x+Colors.ANSI_RESET);
         else if(x == ' '){
@@ -118,6 +171,9 @@ public class Tablero {
     }
 }
 
+/**
+ * Clase para realizar el algoritmo de BFS
+ */
 class BFS {
     static Tablero tablero;
     private static int[][] d;
@@ -125,12 +181,27 @@ class BFS {
     static int[] xCambio = {1, 0, 0, -1};
     static int[] yCambio = {0, 1, -1, -0};
 
+    /**
+     * Crea un nuevo objeto BFS que realiza el algoritmo sobre un tablero
+     *
+     * @param n       Numero de filas
+     * @param s       Numero de columnas
+     * @param tablero El tablero a procesar
+     */
     public BFS(int n, int s, Tablero tablero){
         BFS.d = new int[n][s];
         BFS.padre = new Posicion[n][s];
         BFS.tablero = tablero;
     }
 
+    /**
+     * Metodo que realizar el bfs sobre un tablero y devuelve en un Stack los pasos que debe seguir el pacman para ganar el juego
+     *
+     * @param a      El tablero
+     * @param fuente La posicion donde esta pacman
+     * @return Un stack con los pasos que debe seguir el pacman para ganar el juego
+     * @throws InterruptedException Activado cuando una operacion esta esperando en segundos reales y es interrumpida abruptamente
+     */
     public static Stack<Posicion> bfs(Tablero a, Posicion fuente) throws InterruptedException {
         for (int i = 0; i < d.length; ++i){
             for(int j = 0; j<d[0].length; j++){
@@ -202,6 +273,14 @@ class BFS {
         return moverse;
     }
 
+    /**
+     * Dado un stack de pasos a seguir (Posiciones) pinta este camino
+     *
+     * @param tablero El tablero a pintar
+     * @param pos     Los pasos/posiciones a pintar
+     * @return the stack
+     * @throws InterruptedException Activado cuando una operacion esta esperando en segundos reales y es interrumpida abruptamente
+     */
     public static Stack<Posicion> pintarCamino(Tablero tablero, Stack<Posicion> pos) throws InterruptedException {
         Stack<Posicion> movimientos = new Stack<>();
         Posicion[] a = new Posicion[pos.size()];
@@ -239,6 +318,9 @@ class BFS {
 
     }
 
+    /**
+     * Metodo que imprime todas las distancias del tablero desde el pacman
+     */
     public static void imprimirDistancias(){
         System.out.println("distancias");
         for (int[] ints : d) {
@@ -254,6 +336,9 @@ class BFS {
         }
     }
 
+    /**
+     * Metodo para imprimir todas las coordenadas padres del mejor camino
+     */
     public static void imprimirPadre(){
         System.out.println("padre");
         for(int i = 0; i<d.length; i++){

@@ -4,9 +4,17 @@ import java.util.Scanner;
 import java.util.Stack;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Clase juego, donde esta el codigo que permite la existencia del juego
+ */
 public class Juego {
     Scanner inputfile;
 
+    /**
+     * Crea un nuevo juego
+     *
+     * @param path El nombre del archvio a procesar
+     */
     public Juego(String path){
         System.out.println("Archivo "+path+" cargado");
         this.inputfile = null;
@@ -18,6 +26,11 @@ public class Juego {
         }
     }
 
+    /**
+     * Metodo para jugar
+     *
+     * @throws InterruptedException Activado cuando una operacion esta esperando en segundos reales y es interrumpida abruptamente
+     */
     public void jugar() throws InterruptedException {
         // ----- variables -------
         Scanner in;
@@ -93,9 +106,12 @@ public class Juego {
     }
 }
 
+/**
+ * Clase color, para usar al imprimir
+ */
 //TODO COLOR A PERDER, GANAR, PERDER TURNO
 class Colors{
-    //Colors
+//Colors
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
     public static final String ANSI_RED = "\u001B[31m";
@@ -106,7 +122,7 @@ class Colors{
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_WHITE = "\u001B[37m";
 
-    //Backgrounds
+//Backgrounds
     public static final String ANSI_BLACK_BACKGROUND = "\u001B[40m";
     public static final String ANSI_RED_BACKGROUND = "\u001B[41m";
     public static final String ANSI_GREEN_BACKGROUND = "\u001B[42m";
@@ -116,6 +132,6 @@ class Colors{
     public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
     public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
 
-    //Textures
+//Textures
     public static final String ANSI_BOLD = "\u001b[1m";
 }
